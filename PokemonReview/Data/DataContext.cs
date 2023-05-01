@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PokemonReview.Models;
-using System;
 
 namespace PokemonReview.Data
 {
@@ -38,7 +37,7 @@ namespace PokemonReview.Data
                 .HasForeignKey(p => p.PokemonId);
             modelBuilder.Entity<PokemonCategory>()
                 .HasOne(p => p.Category)
-                .WithMany(pc => PokemonCategories)
+                .WithMany(pc => pc.PokemonCategories)
                 .HasForeignKey(c => c.CategoryId);
         }
     }
