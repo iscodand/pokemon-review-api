@@ -2,6 +2,7 @@
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
@@ -39,6 +40,19 @@ namespace PokemonReview.Repository
         public bool CategoriesExists(int categoryId)
         {
             return _context.Categories.Any(c => c.Id == categoryId);
+        }
+
+        public bool CreateCategory(CreateCategoryDTO categoryDTO)
+        {
+            Category category = _mapper.Map<Category>(categoryDTO);
+            _context.Categories.Add(category);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

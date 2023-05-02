@@ -58,5 +58,32 @@ namespace PokemonReview.Controllers
 
             return Ok(pokemons);
         }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(CreateCategoryDTO))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromBody] CreateCategoryDTO categoryDTO)
+        {
+            if (categoryDTO == null)
+                return BadRequest();
+
+            GetCategoryDTO? categoryExists = _categoryRepository.GetCategories()
+                .Where(c => c.Name.Trim().ToUpper() == categoryDTO.Name.Trim().ToUpper())
+                .FirstOrDefault();
+
+            if (categoryExists != null)
+            {
+                ModelState.AddModelError("name", "Ops! Category already registered.");
+                return StatusCode(400, ModelState);
+            }
+
+            if (!_categoryRepository.CreateCategory(categoryDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return StatusCode(201, "Category Successfuly created.");
+        }
     }
 }

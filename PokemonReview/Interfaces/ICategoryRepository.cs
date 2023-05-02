@@ -8,5 +8,8 @@ namespace PokemonReview.Interfaces
         GetCategoryDTO GetCategory(int categoryId);
         ICollection<GetPokemonDTO> GetPokemonsByCategory(int categoryId);
         bool CategoriesExists(int categoryId);
+
+        bool CreateCategory(CreateCategoryDTO category);
+        bool Save();
     }
 }
