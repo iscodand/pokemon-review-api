@@ -1,12 +1,12 @@
-﻿using PokemonReview.Models;
+﻿using PokemonReview.Data.DTOs;
 
 namespace PokemonReview.Interfaces
 {
     public interface ICategoryRepository
     {
-        ICollection<Category> GetCategories();
-        Category GetCategory(int categoryId);
-        ICollection<Pokemon> GetPokemonsByCategory(int categoryId);
+        ICollection<GetCategoryDTO> GetCategories();
+        GetCategoryDTO GetCategory(int categoryId);
+        ICollection<GetPokemonDTO> GetPokemonsByCategory(int categoryId);
         bool CategoriesExists(int categoryId);
     }
 }

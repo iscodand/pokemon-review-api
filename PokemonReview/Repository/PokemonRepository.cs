@@ -1,31 +1,34 @@
-﻿using PokemonReview.Data;
+﻿using AutoMapper;
+using PokemonReview.Data;
+using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
+using System.Collections.Generic;
 
 namespace PokemonReview.Repository
 {
     public class PokemonRepository : IPokemonRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public PokemonRepository(DataContext context)
+        public PokemonRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public ICollection<Pokemon> GetPokemons()
+        public ICollection<GetPokemonDTO> GetPokemons()
         {
-            return _context.Pokemons.OrderBy(p => p.Id).ToList();
+            return _mapper.Map<List<GetPokemonDTO>>
+                (_context.Pokemons.OrderBy(p => p.Id).ToList());
         }
 
-        public Pokemon GetPokemon(int pokeId)
+        public GetPokemonDTO GetPokemon(int pokeId)
         {
-            return _context.Pokemons.Where(p => p.Id == pokeId).FirstOrDefault();
-        }
-
-        public Pokemon GetPokemon(string name)
-        {
-            return _context.Pokemons.Where(p => p.Name == name).FirstOrDefault();
+            return _mapper.Map<GetPokemonDTO>(
+                _context.Pokemons.Where(p => p.Id == pokeId)
+                .FirstOrDefault());
         }
 
         public decimal GetPokemonRating(int pokeId)

@@ -1,32 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PokemonReview.Data;
+using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
-using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
     public class OwnerRepository : IOwnerRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public OwnerRepository(DataContext context)
+        public OwnerRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public ICollection<Owner> GetOwners()
+        public ICollection<GetOwnerDTO> GetOwners()
         {
-            return _context.Owners.OrderBy(o => o.Id).ToList();
+            return _mapper.Map<List<GetOwnerDTO>>(
+                _context.Owners.OrderBy(o => o.Id).ToList());
         }
 
-        public Owner GetOwner(int ownerId)
+        public GetOwnerDTO GetOwner(int ownerId)
         {
-            return _context.Owners.Where(o => o.Id == ownerId).Include(o => o.Country).FirstOrDefault();
+            return _mapper.Map<GetOwnerDTO>(
+                _context.Owners.Where(o => o.Id == ownerId)
+                .Include(o => o.Country)
+                .FirstOrDefault());
         }
 
-        public ICollection<Pokemon> GetPokemonsByOwner(int ownerId)
+        public ICollection<GetPokemonDTO> GetPokemonsByOwner(int ownerId)
         {
-            return _context.PokemonOwners.Where(po => po.OwnerId == ownerId).Select(po => po.Pokemon).ToList();
+            return _mapper.Map<List<GetPokemonDTO>>(
+                _context.PokemonOwners.Where(po => po.OwnerId == ownerId)
+                .Select(po => po.Pokemon).ToList());
         }
 
         public bool OwnerExists(int ownerId)

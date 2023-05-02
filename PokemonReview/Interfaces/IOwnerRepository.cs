@@ -1,12 +1,13 @@
-﻿using PokemonReview.Models;
+﻿using PokemonReview.Data.DTOs;
+using PokemonReview.Models;
 
 namespace PokemonReview.Interfaces
 {
     public interface IOwnerRepository
     {
-        ICollection<Owner> GetOwners();
-        Owner GetOwner(int ownerId);
-        ICollection<Pokemon> GetPokemonsByOwner(int ownerId);
+        ICollection<GetOwnerDTO> GetOwners();
+        GetOwnerDTO GetOwner(int ownerId);
+        ICollection<GetPokemonDTO> GetPokemonsByOwner(int ownerId);
         bool OwnerExists(int ownerId);
     }
 }

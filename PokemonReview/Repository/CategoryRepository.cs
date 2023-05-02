@@ -1,31 +1,39 @@
-﻿using PokemonReview.Data;
+﻿using AutoMapper;
+using PokemonReview.Data;
+using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
-using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public CategoryRepository(DataContext context)
+        public CategoryRepository(IMapper mapper, DataContext context)
         {
+            _mapper = mapper;
             _context = context;
         }
 
-        public ICollection<Category> GetCategories()
+        public ICollection<GetCategoryDTO> GetCategories()
         {
-            return _context.Categories.OrderBy(c => c.Id).ToList();
+            return _mapper.Map<List<GetCategoryDTO>>(
+                _context.Categories.OrderBy(c => c.Id).ToList());
         }
 
-        public Category GetCategory(int categoryId)
+        public GetCategoryDTO GetCategory(int categoryId)
         {
-            return _context.Categories.Where(c => c.Id == categoryId).FirstOrDefault();
+            return _mapper.Map<GetCategoryDTO>(
+                _context.Categories.FirstOrDefault(c => c.Id == categoryId));
         }
 
-        public ICollection<Pokemon> GetPokemonsByCategory(int categoryId)
+        public ICollection<GetPokemonDTO> GetPokemonsByCategory(int categoryId)
         {
-            return _context.PokemonCategories.Where(c => c.CategoryId == categoryId).Select(c => c.Pokemon).ToList();
+            return _mapper.Map<List<GetPokemonDTO>>(
+                _context.PokemonCategories
+                .Where(c => c.CategoryId == categoryId)
+                .Select(c => c.Pokemon).ToList());
         }
         
         public bool CategoriesExists(int categoryId)

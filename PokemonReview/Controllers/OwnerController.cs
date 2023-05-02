@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
@@ -11,19 +10,17 @@ namespace PokemonReview.Controllers
     public class OwnerController : Controller
     {
         private readonly IOwnerRepository _ownerRepository;
-        private readonly IMapper _mapper;
 
-        public OwnerController(IOwnerRepository ownerRepository, IMapper mapper)
+        public OwnerController(IOwnerRepository ownerRepository)
         {
             _ownerRepository = ownerRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(ICollection<Owner>))]
+        [ProducesResponseType(200, Type = typeof(ICollection<GetOwnerDTO>))]
         public IActionResult GetOwners()
         {
-            var owners = _mapper.Map<List<GetOwnerDTO>>(_ownerRepository.GetOwners());
+            ICollection<GetOwnerDTO> owners = _ownerRepository.GetOwners();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -32,14 +29,14 @@ namespace PokemonReview.Controllers
         }
 
         [HttpGet("{ownerId}")]
-        [ProducesResponseType(200, Type = typeof(Owner))]
+        [ProducesResponseType(200, Type = typeof(GetOwnerDTO))]
         [ProducesResponseType(404)]
         public IActionResult GetOwner(int ownerId)
         {
             if (!_ownerRepository.OwnerExists(ownerId))
                 return NotFound();
 
-            var owner = _mapper.Map<GetOwnerDTO>(_ownerRepository.GetOwner(ownerId));
+            GetOwnerDTO owner = _ownerRepository.GetOwner(ownerId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -55,8 +52,7 @@ namespace PokemonReview.Controllers
             if (!_ownerRepository.OwnerExists(ownerId))
                 return NotFound();
 
-            var pokemons = _mapper.Map<List<GetPokemonDTO>>(
-                _ownerRepository.GetPokemonsByOwner(ownerId));
+            ICollection<GetPokemonDTO> pokemons = _ownerRepository.GetPokemonsByOwner(ownerId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
