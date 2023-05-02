@@ -13,6 +13,7 @@ namespace PokemonReview.Helpers
             CreateMap<Country, GetCountryDTO>();
             CreateMap<Owner, GetOwnerDTO>();
             CreateMap<Review, GetReviewDTO>();
+            CreateMap<Reviewer, GetReviewerDTO>();
         }
     }
 }
