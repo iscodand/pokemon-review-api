@@ -8,6 +8,6 @@ namespace PokemonReview.Interfaces
         public Pokemon GetPokemon(int pokeId);
         public Pokemon GetPokemon(string name);
         public decimal GetPokemonRating(int pokeId);
-        public bool GetPokemonExists(int pokeId);
+        public bool PokemonExists(int pokeId);
     }
 }

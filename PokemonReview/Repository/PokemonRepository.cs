@@ -41,7 +41,7 @@ namespace PokemonReview.Repository
             return Math.Round(rating, 1);
         }
 
-        public bool GetPokemonExists(int pokeId)
+        public bool PokemonExists(int pokeId)
         {
             return _context.Pokemons.Any(p => p.Id == pokeId);
         }
