@@ -8,7 +8,11 @@ namespace PokemonReview.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<Pokemon, PokemonDTO>();
+            CreateMap<Pokemon, GetPokemonDTO>();
+            CreateMap<Category, GetCategoryDTO>();
+            CreateMap<Country, GetCountryDTO>();
+            CreateMap<Owner, GetOwnerDTO>();
+            CreateMap<Review, GetReviewDTO>();
         }
     }
 }
