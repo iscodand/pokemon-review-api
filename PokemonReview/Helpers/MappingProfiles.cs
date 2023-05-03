@@ -18,8 +18,13 @@ namespace PokemonReview.Helpers
             CreateMap<CreateOwnerDTO, Owner>();
 
             CreateMap<Pokemon, GetPokemonDTO>();
+            CreateMap<CreatePokemonDTO, Pokemon>();
+
             CreateMap<Review, GetReviewDTO>();
+            CreateMap<CreateReviewDTO, Review>();
+
             CreateMap<Reviewer, GetReviewerDTO>();
+            CreateMap<CreateReviewerDTO, Reviewer>();
         }
     }
 }
