@@ -50,7 +50,6 @@ namespace PokemonReview.Repository
         public bool CreateOwner(CreateOwnerDTO ownerDTO)
         {
             Owner owner = _mapper.Map<Owner>(ownerDTO);
-            Debug.WriteLine(ownerDTO.CountryID);
             owner.Country = _context.Countries.First(c => c.Id == ownerDTO.CountryID);
             owner.CreatedAt = DateTime.Now;
 
