@@ -7,8 +7,8 @@ namespace PokemonReview.Data.DTOs
         public int Id { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public int Rating { get; set; }
+        public decimal Rating { get; set; }
         public GetPokemonDTO Pokemon { get; set; }
-        public Reviewer Reviewer { get; set; }
+        public GetReviewerDTO Reviewer { get; set; }
     }
 }
