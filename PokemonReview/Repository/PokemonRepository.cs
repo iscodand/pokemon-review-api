@@ -2,6 +2,7 @@
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
@@ -45,6 +46,37 @@ namespace PokemonReview.Repository
         public bool PokemonExists(int pokeId)
         {
             return _context.Pokemons.Any(p => p.Id == pokeId);
+        }
+
+        public bool CreatePokemon(CreatePokemonDTO pokemonDTO)
+        {
+            Pokemon pokemon = _mapper.Map<Pokemon>(pokemonDTO);
+            Owner pokemonOwnerEntity = _context.Owners.First(o => o.Id == pokemonDTO.OwnerID);
+            Category pokemonCategoryEntity = _context.Categories.First(c => c.Id == pokemonDTO.CategoryID);
+
+            PokemonOwner pokemonOwner = new PokemonOwner()
+            {
+                Pokemon = pokemon,
+                Owner = pokemonOwnerEntity,
+            };
+
+            PokemonCategory pokemonCategory = new PokemonCategory()
+            {
+                Pokemon = pokemon,
+                Category = pokemonCategoryEntity,
+            };
+
+            _context.Pokemons.Add(pokemon);
+            _context.PokemonOwners.Add(pokemonOwner);
+            _context.PokemonCategories.Add(pokemonCategory);
+
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

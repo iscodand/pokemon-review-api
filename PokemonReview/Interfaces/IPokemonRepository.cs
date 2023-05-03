@@ -9,5 +9,8 @@ namespace PokemonReview.Interfaces
         public GetPokemonDTO GetPokemon(int pokeId);
         public decimal GetPokemonRating(int pokeId);
         public bool PokemonExists(int pokeId);
+
+        public bool CreatePokemon(CreatePokemonDTO pokemonDTO);
+        public bool Save();
     }
 }

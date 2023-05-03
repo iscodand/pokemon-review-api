@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
@@ -11,10 +10,16 @@ namespace PokemonReview.Controllers
     public class PokemonController : Controller
     {
         private readonly IPokemonRepository _pokemonRepository;
+        private readonly IOwnerRepository _ownerRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public PokemonController(IPokemonRepository pokemonRepository)
+        public PokemonController(IPokemonRepository pokemonRepository,
+            IOwnerRepository ownerRepository,
+            ICategoryRepository categoryRepository)
         {
             _pokemonRepository = pokemonRepository;
+            _ownerRepository = ownerRepository;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -59,6 +64,44 @@ namespace PokemonReview.Controllers
                 return BadRequest(ModelState);
 
             return Ok(pokemonRating);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(CreatePokemonDTO))]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePokemon(CreatePokemonDTO pokemonDTO)
+        {
+            if (!_ownerRepository.OwnerExists(pokemonDTO.OwnerID))
+            {
+                ModelState.AddModelError("ownerID", "Owner not found. Verify and try again.");
+                return BadRequest(ModelState);
+            };
+
+            if (!_categoryRepository.CategoriesExists(pokemonDTO.CategoryID))
+            {
+                ModelState.AddModelError("ownerID", "Category not found. Verify and try again.");
+                return BadRequest(ModelState);
+            };
+
+            if (pokemonDTO == null)
+                return BadRequest(ModelState);
+
+            bool pokemonExists = _pokemonRepository.GetPokemons().
+                Any(p => p.Name.Trim().ToUpper() == pokemonDTO.Name.Trim().ToUpper());
+
+            if (pokemonExists)
+            {
+                ModelState.AddModelError("Name", "Ops! Pokemon already registered.");
+                return BadRequest(ModelState);
+            }
+
+            if (!_pokemonRepository.CreatePokemon(pokemonDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Pokemon Successfuly created.");
         }
     }
 }
