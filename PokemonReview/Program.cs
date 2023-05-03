@@ -40,11 +40,11 @@ if (args.Length == 1 && args[0].ToLower() == "seeddata")
 
 static void SeedData(IHost app)
 {
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 
-    using var scope = scopedFactory.CreateScope();
-    var service = scope.ServiceProvider.GetService<Seed>();
-    service.SeedDataContext();
+    using IServiceScope? scope = scopedFactory?.CreateScope();
+    Seed? service = scope?.ServiceProvider.GetService<Seed>();
+    service?.SeedDataContext();
 }
 
 // Configure the HTTP request pipeline.

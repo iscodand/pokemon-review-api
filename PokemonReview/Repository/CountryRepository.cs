@@ -26,8 +26,7 @@ namespace PokemonReview.Repository
         public GetCountryDTO GetCountry(int countryId)
         {
             return _mapper.Map<GetCountryDTO>(
-                _context.Countries.Where(c => c.Id == countryId)
-                .FirstOrDefault());
+                _context.Countries.FirstOrDefault(c => c.Id == countryId));
         }
 
         public GetCountryDTO GetCountryByOwner(int ownerId)
@@ -61,7 +60,7 @@ namespace PokemonReview.Repository
         public bool Save()
         {
             int saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
     }
 }

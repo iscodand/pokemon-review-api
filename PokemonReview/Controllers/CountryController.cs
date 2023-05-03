@@ -86,7 +86,7 @@ namespace PokemonReview.Controllers
                 return BadRequest(ModelState);
 
             bool countryExists = _countryRepository.GetCountries()
-                .Any(c => c.Name.Trim().ToUpper() == countryDTO.Name.Trim().ToUpper());
+                .Any(c => c.Name?.Trim().ToUpper() == countryDTO.Name?.Trim().ToUpper());
         
             if (countryExists)
             {

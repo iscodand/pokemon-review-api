@@ -51,8 +51,8 @@ namespace PokemonReview.Repository
         
         public bool DuplicatedReview(int reviewerId, int pokeId)
         {
-            Reviewer reviewer = _context.Reviewers.FirstOrDefault(r => r.Id == reviewerId);
-            Pokemon pokemon = _context.Pokemons.FirstOrDefault(p => p.Id == pokeId);
+            Reviewer reviewer = _context.Reviewers.First(r => r.Id == reviewerId);
+            Pokemon pokemon = _context.Pokemons.First(p => p.Id == pokeId);
 
             bool reviewExists = _context.Reviews.Any(r => r.Reviewer == reviewer && r.Pokemon == pokemon);
 
@@ -77,7 +77,7 @@ namespace PokemonReview.Repository
         public bool Save()
         {
             int saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
     }
 }

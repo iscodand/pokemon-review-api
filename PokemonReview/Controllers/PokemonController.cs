@@ -86,8 +86,8 @@ namespace PokemonReview.Controllers
             if (pokemonDTO == null)
                 return BadRequest(ModelState);
 
-            bool pokemonExists = _pokemonRepository.GetPokemons().
-                Any(p => p.Name.Trim().ToUpper() == pokemonDTO.Name.Trim().ToUpper());
+            bool pokemonExists = _pokemonRepository.GetPokemons()
+                .Any(p => p.Name?.Trim().ToUpper() == pokemonDTO.Name?.Trim().ToUpper());
 
             if (pokemonExists)
             {

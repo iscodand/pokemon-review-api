@@ -68,7 +68,7 @@ namespace PokemonReview.Controllers
                 return BadRequest();
 
             bool categoryExists = _categoryRepository.GetCategories()
-                .Any(c => c.Name.Trim().ToUpper() == categoryDTO.Name.Trim().ToUpper());
+                .Any(c => c.Name?.Trim().ToUpper() == categoryDTO.Name?.Trim().ToUpper());
 
             if (categoryExists)
             {

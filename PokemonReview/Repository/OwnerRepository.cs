@@ -4,20 +4,17 @@ using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
-using System.Diagnostics;
 
 namespace PokemonReview.Repository
 {
     public class OwnerRepository : IOwnerRepository
     {
         private readonly DataContext _context;
-        private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
 
-        public OwnerRepository(DataContext context, ICountryRepository countryRepository, IMapper mapper)
+        public OwnerRepository(DataContext context, IMapper mapper)
         {
             _context = context;
-            _countryRepository = countryRepository;
             _mapper = mapper;
         }
 
@@ -60,7 +57,7 @@ namespace PokemonReview.Repository
         public bool Save()
         {
             int saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
     }
 }

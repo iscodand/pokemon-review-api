@@ -13,12 +13,12 @@ namespace PokemonReview.Data.DTOs
         [Required]
         [MinLength(3, ErrorMessage = "Review Title must contain at least 3 chars.")]
         [MaxLength(90, ErrorMessage = "Review Title must contain less than 100 characters.")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
         
         [Required]
         [MinLength(3, ErrorMessage = "Review Text must contain at least 15 chars.")]
         [MaxLength(500, ErrorMessage = "Review Text must contain less than 500 characters.")]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         [Required]
         [Range(0, 5, ErrorMessage = "Rating must be higher than 0 or less than 5.")]

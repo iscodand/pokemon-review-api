@@ -26,8 +26,7 @@ namespace PokemonReview.Repository
         public GetPokemonDTO GetPokemon(int pokeId)
         {
             return _mapper.Map<GetPokemonDTO>(
-                _context.Pokemons.Where(p => p.Id == pokeId)
-                .FirstOrDefault());
+                _context.Pokemons.FirstOrDefault(p => p.Id == pokeId));
         }
 
         public decimal GetPokemonRating(int pokeId)
@@ -54,13 +53,13 @@ namespace PokemonReview.Repository
             Owner pokemonOwnerEntity = _context.Owners.First(o => o.Id == pokemonDTO.OwnerID);
             Category pokemonCategoryEntity = _context.Categories.First(c => c.Id == pokemonDTO.CategoryID);
 
-            PokemonOwner pokemonOwner = new PokemonOwner()
+            PokemonOwner pokemonOwner = new()
             {
                 Pokemon = pokemon,
                 Owner = pokemonOwnerEntity,
             };
 
-            PokemonCategory pokemonCategory = new PokemonCategory()
+            PokemonCategory pokemonCategory = new()
             {
                 Pokemon = pokemon,
                 Category = pokemonCategoryEntity,
@@ -76,7 +75,7 @@ namespace PokemonReview.Repository
         public bool Save()
         {
             int saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
     }
 }

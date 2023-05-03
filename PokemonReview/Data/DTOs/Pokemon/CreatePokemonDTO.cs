@@ -7,7 +7,7 @@ namespace PokemonReview.Data.DTOs
         [Required]
         [MinLength(3, ErrorMessage = "Pokemon Name must contain at least 3 chars.")]
         [MaxLength(90, ErrorMessage = "Pokemon Name must contain less than 100 characters.")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required(ErrorMessage = "Pokemon needs an Owner!")]
         public int OwnerID { get; set; }
