@@ -19,7 +19,7 @@ namespace PokemonReview.Controllers
         [ProducesResponseType(200, Type = typeof(ICollection<GetCategoryDTO>))]
         public IActionResult GetCategories()
         {
-            var categories = _categoryRepository.GetCategories();
+            ICollection<GetCategoryDTO> categories = _categoryRepository.GetCategories();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -35,7 +35,7 @@ namespace PokemonReview.Controllers
             if (!_categoryRepository.CategoriesExists(categoryId))
                 return NotFound();
 
-            var category = _categoryRepository.GetCategory(categoryId);
+            GetCategoryDTO category = _categoryRepository.GetCategory(categoryId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,7 +51,7 @@ namespace PokemonReview.Controllers
             if (!_categoryRepository.CategoriesExists(categoryId))
                 return NotFound();
 
-            var pokemons = _categoryRepository.GetPokemonsByCategory(categoryId);
+            ICollection<GetPokemonDTO> pokemons = _categoryRepository.GetPokemonsByCategory(categoryId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -67,14 +67,13 @@ namespace PokemonReview.Controllers
             if (categoryDTO == null)
                 return BadRequest();
 
-            GetCategoryDTO? categoryExists = _categoryRepository.GetCategories()
-                .Where(c => c.Name.Trim().ToUpper() == categoryDTO.Name.Trim().ToUpper())
-                .FirstOrDefault();
+            bool categoryExists = _categoryRepository.GetCategories()
+                .Any(c => c.Name.Trim().ToUpper() == categoryDTO.Name.Trim().ToUpper());
 
-            if (categoryExists != null)
+            if (categoryExists)
             {
                 ModelState.AddModelError("name", "Ops! Category already registered.");
-                return StatusCode(400, ModelState);
+                return BadRequest(ModelState);
             }
 
             if (!_categoryRepository.CreateCategory(categoryDTO))
@@ -83,7 +82,7 @@ namespace PokemonReview.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return StatusCode(201, "Category Successfuly created.");
+            return Ok("Category Successfuly created.");
         }
     }
 }
