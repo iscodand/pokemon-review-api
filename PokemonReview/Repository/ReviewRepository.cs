@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
@@ -46,6 +47,37 @@ namespace PokemonReview.Repository
         public bool ReviewExists(int reviewId)
         {
             return _context.Reviews.Any(r => r.Id == reviewId);
+        }
+        
+        public bool DuplicatedReview(int reviewerId, int pokeId)
+        {
+            Reviewer reviewer = _context.Reviewers.FirstOrDefault(r => r.Id == reviewerId);
+            Pokemon pokemon = _context.Pokemons.FirstOrDefault(p => p.Id == pokeId);
+
+            bool reviewExists = _context.Reviews.Any(r => r.Reviewer == reviewer && r.Pokemon == pokemon);
+
+            if (reviewExists)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CreateReview(CreateReviewDTO reviewDTO)
+        {
+            Review review = _mapper.Map<Review>(reviewDTO);
+            review.Reviewer = _context.Reviewers.First(r => r.Id == reviewDTO.ReviewerID);
+            review.Pokemon = _context.Pokemons.First(p => p.Id == reviewDTO.PokemonID);
+
+            _context.Reviews.Add(review);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

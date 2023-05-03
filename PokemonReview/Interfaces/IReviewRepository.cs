@@ -1,5 +1,4 @@
 ﻿using PokemonReview.Data.DTOs;
-using PokemonReview.Models;
 
 namespace PokemonReview.Interfaces
 {
@@ -10,5 +9,9 @@ namespace PokemonReview.Interfaces
         ICollection<GetReviewDTO> GetReviewsByPokemon(int pokeId);
         ICollection<GetReviewDTO> GetReviewsByReviewer(int reviewerId);
         bool ReviewExists(int reviewId);
+        bool DuplicatedReview(int reviewerId, int pokeId);
+
+        bool CreateReview(CreateReviewDTO reviewDTO);
+        bool Save();
     }
 }
