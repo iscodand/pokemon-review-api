@@ -2,8 +2,6 @@
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
-using PokemonReview.Models;
-using System.Collections.Generic;
 
 namespace PokemonReview.Repository
 {

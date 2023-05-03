@@ -45,6 +45,8 @@ namespace PokemonReview.Repository
         public bool CreateCategory(CreateCategoryDTO categoryDTO)
         {
             Category category = _mapper.Map<Category>(categoryDTO);
+            category.CreatedAt = DateTime.Now;
+            
             _context.Categories.Add(category);
             return Save();
         }
