@@ -11,9 +11,13 @@ namespace PokemonReview.Helpers
             CreateMap<Category, GetCategoryDTO>();
             CreateMap<CreateCategoryDTO, Category>();
 
-            CreateMap<Pokemon, GetPokemonDTO>();
             CreateMap<Country, GetCountryDTO>();
+            CreateMap<CreateCountryDTO, Country>();
+
             CreateMap<Owner, GetOwnerDTO>();
+            CreateMap<CreateOwnerDTO, Owner>();
+
+            CreateMap<Pokemon, GetPokemonDTO>();
             CreateMap<Review, GetReviewDTO>();
             CreateMap<Reviewer, GetReviewerDTO>();
         }
