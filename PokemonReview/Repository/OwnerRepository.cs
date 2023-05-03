@@ -3,17 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
+using System.Diagnostics;
 
 namespace PokemonReview.Repository
 {
     public class OwnerRepository : IOwnerRepository
     {
         private readonly DataContext _context;
+        private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
 
-        public OwnerRepository(DataContext context, IMapper mapper)
+        public OwnerRepository(DataContext context, ICountryRepository countryRepository, IMapper mapper)
         {
             _context = context;
+            _countryRepository = countryRepository;
             _mapper = mapper;
         }
 
@@ -41,6 +45,23 @@ namespace PokemonReview.Repository
         public bool OwnerExists(int ownerId)
         {
             return _context.Owners.Any(o => o.Id == ownerId);
+        }
+
+        public bool CreateOwner(CreateOwnerDTO ownerDTO)
+        {
+            Owner owner = _mapper.Map<Owner>(ownerDTO);
+            Debug.WriteLine(ownerDTO.CountryID);
+            owner.Country = _context.Countries.First(c => c.Id == ownerDTO.CountryID);
+            owner.CreatedAt = DateTime.Now;
+
+            _context.Owners.Add(owner);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

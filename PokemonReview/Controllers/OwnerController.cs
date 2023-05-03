@@ -10,10 +10,12 @@ namespace PokemonReview.Controllers
     public class OwnerController : Controller
     {
         private readonly IOwnerRepository _ownerRepository;
+        private readonly ICountryRepository _countryRepository;
 
-        public OwnerController(IOwnerRepository ownerRepository)
+        public OwnerController(IOwnerRepository ownerRepository, ICountryRepository countryRepository)
         {
             _ownerRepository = ownerRepository;
+            _countryRepository = countryRepository;
         }
 
         [HttpGet]
@@ -58,6 +60,29 @@ namespace PokemonReview.Controllers
                 return BadRequest(ModelState);
 
             return Ok(pokemons);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(CreateOwnerDTO))]
+        [ProducesResponseType(404)]
+        public IActionResult CreateOwner([FromBody] CreateOwnerDTO ownerDTO)
+        {
+            if (!_countryRepository.CountryExists(ownerDTO.CountryID))
+            {
+                ModelState.AddModelError("countryId", "Country not found. Verify and try again");
+                return BadRequest(ModelState);
+            }
+
+            if (ownerDTO == null)
+                return BadRequest(ModelState);
+
+            if (!_ownerRepository.CreateOwner(ownerDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Owner Successfuly Created.");
         }
     }
 }
