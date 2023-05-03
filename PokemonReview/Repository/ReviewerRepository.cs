@@ -2,6 +2,7 @@
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
@@ -37,6 +38,19 @@ namespace PokemonReview.Repository
         public bool ReviewerExists(int reviewerId)
         {
             return _context.Reviewers.Any(r => r.Id == reviewerId);
+        }
+
+        public bool CreateReviewer(CreateReviewerDTO reviewerDTO)
+        {
+            Reviewer reviewer = _mapper.Map<Reviewer>(reviewerDTO);
+            _context.Reviewers.Add(reviewer);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

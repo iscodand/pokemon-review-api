@@ -8,5 +8,8 @@ namespace PokemonReview.Interfaces
         GetReviewerDTO GetReviewer(int reviewerId);
         ICollection<GetReviewDTO> GetReviewsByReviewer(int reviewerId);
         bool ReviewerExists (int reviewerId);
+
+        bool CreateReviewer(CreateReviewerDTO reviewerDTO);
+        bool Save();
     }
 }

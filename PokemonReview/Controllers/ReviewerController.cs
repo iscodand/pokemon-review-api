@@ -58,5 +58,22 @@ namespace PokemonReview.Controllers
 
             return Ok(reviews);
         }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(CreateReviewerDTO))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateReviewer(CreateReviewerDTO createReviewerDTO)
+        {
+            if (createReviewerDTO == null)
+                return BadRequest(ModelState);
+            
+            if (_reviewerRepository.CreateReviewer(createReviewerDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Reviewer successfuly created.");
+        }
     }
 }
