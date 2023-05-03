@@ -2,6 +2,7 @@
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
+using PokemonReview.Models;
 
 namespace PokemonReview.Repository
 {
@@ -46,6 +47,21 @@ namespace PokemonReview.Repository
         public bool CountryExists(int countryId)
         {
             return _context.Countries.Any(c => c.Id == countryId);
+        }
+
+        public bool CreateCountry(CreateCountryDTO countryDTO)
+        {
+            Country country = _mapper.Map<Country>(countryDTO);
+            country.CreatedAt = DateTime.Now;
+
+            _context.Countries.Add(country);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

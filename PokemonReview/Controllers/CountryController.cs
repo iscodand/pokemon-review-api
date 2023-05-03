@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
-using PokemonReview.Models;
 
 namespace PokemonReview.Controllers
 {
@@ -76,6 +75,32 @@ namespace PokemonReview.Controllers
                 return BadRequest(ModelState);
 
             return Ok(owners);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(CreateCountryDTO))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCountry([FromBody] CreateCountryDTO countryDTO)
+        {
+            if (countryDTO == null)
+                return BadRequest(ModelState);
+
+            bool countryExists = _countryRepository.GetCountries()
+                .Any(c => c.Name.Trim().ToUpper() == countryDTO.Name.Trim().ToUpper());
+        
+            if (countryExists)
+            {
+                ModelState.AddModelError("Name", "Ops! Category already registered.");
+                return BadRequest(ModelState);
+            }
+
+            if (!_countryRepository.CreateCountry(countryDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Country Successfuly created.");
         }
     }
 }

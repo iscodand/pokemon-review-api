@@ -1,5 +1,4 @@
 ﻿using PokemonReview.Data.DTOs;
-using PokemonReview.Models;
 
 namespace PokemonReview.Interfaces
 {
@@ -10,5 +9,8 @@ namespace PokemonReview.Interfaces
         GetCountryDTO GetCountryByOwner(int ownerId);
         ICollection<GetOwnerDTO> GetOwnersByCountry(int countryId);
         bool CountryExists(int countryId);
+
+        bool CreateCountry(CreateCountryDTO countryDTO);
+        bool Save();
     }
 }
