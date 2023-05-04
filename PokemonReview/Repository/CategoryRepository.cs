@@ -51,10 +51,22 @@ namespace PokemonReview.Repository
             return Save();
         }
 
+        public bool DeleteCategory(int categoryId)
+        {
+            Category? category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                return Save();
+            }
+            return false;
+        }
+
         public bool Save()
         {
             int saved = _context.SaveChanges();
             return saved > 0;
         }
+
     }
 }

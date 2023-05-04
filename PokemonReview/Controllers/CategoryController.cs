@@ -84,5 +84,22 @@ namespace PokemonReview.Controllers
 
             return Ok("Category Successfuly created.");
         }
+
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCategory(int categoryId)
+        {
+            if (!_categoryRepository.CategoriesExists(categoryId))
+                return NotFound();
+
+            if (!_categoryRepository.DeleteCategory(categoryId))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
