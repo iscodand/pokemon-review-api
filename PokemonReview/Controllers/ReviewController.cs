@@ -120,5 +120,22 @@ namespace PokemonReview.Controllers
 
             return Ok("Review successfuly created.");
         }
+
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteReview(int reviewID)
+        {
+            if (!_reviewRepository.ReviewExists(reviewID))
+                return NotFound();
+
+            if (!_reviewRepository.DeleteReview(reviewID))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

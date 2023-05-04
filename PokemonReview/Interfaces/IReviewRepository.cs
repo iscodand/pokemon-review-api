@@ -12,6 +12,7 @@ namespace PokemonReview.Interfaces
         bool DuplicatedReview(int reviewerId, int pokeId);
 
         bool CreateReview(CreateReviewDTO reviewDTO);
+        bool DeleteReview(int reviewId);
         bool Save();
     }
 }

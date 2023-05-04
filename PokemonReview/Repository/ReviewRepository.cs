@@ -48,7 +48,7 @@ namespace PokemonReview.Repository
         {
             return _context.Reviews.Any(r => r.Id == reviewId);
         }
-        
+
         public bool DuplicatedReview(int reviewerId, int pokeId)
         {
             Reviewer reviewer = _context.Reviewers.First(r => r.Id == reviewerId);
@@ -72,6 +72,17 @@ namespace PokemonReview.Repository
 
             _context.Reviews.Add(review);
             return Save();
+        }
+
+        public bool DeleteReview(int reviewId)
+        {
+            Review? review = _context.Reviews.FirstOrDefault(r => r.Id == reviewId);
+            if (review != null)
+            {
+                _context.Reviews.Remove(review);
+                return Save();
+            }
+            return false;
         }
 
         public bool Save()
