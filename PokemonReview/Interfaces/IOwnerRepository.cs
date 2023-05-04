@@ -10,6 +10,7 @@ namespace PokemonReview.Interfaces
         bool OwnerExists(int ownerId);
 
         bool CreateOwner(CreateOwnerDTO ownerDTO);
+        bool DeleteOwner(int ownerId);
         bool Save();
     }
 }
