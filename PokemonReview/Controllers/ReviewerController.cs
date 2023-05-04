@@ -67,7 +67,7 @@ namespace PokemonReview.Controllers
             if (createReviewerDTO == null)
                 return BadRequest(ModelState);
             
-            if (_reviewerRepository.CreateReviewer(createReviewerDTO))
+            if (!_reviewerRepository.CreateReviewer(createReviewerDTO))
             {
                 ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
                 return StatusCode(500, ModelState);
