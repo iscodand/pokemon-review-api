@@ -75,5 +75,22 @@ namespace PokemonReview.Controllers
 
             return Ok("Reviewer successfuly created.");
         }
+
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteReviewer(int reviewerId)
+        {
+            if (!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            if (!_reviewerRepository.DeleteReviewer(reviewerId))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
