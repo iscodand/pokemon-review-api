@@ -57,6 +57,17 @@ namespace PokemonReview.Repository
             return Save();
         }
 
+        public bool DeleteCountry(int countryId)
+        {
+            Country? country = _context.Countries.FirstOrDefault(c => c.Id == countryId);
+            if (country != null)
+            {
+                _context.Countries.Remove(country);
+                return Save();
+            }
+            return false;
+        }
+
         public bool Save()
         {
             int saved = _context.SaveChanges();

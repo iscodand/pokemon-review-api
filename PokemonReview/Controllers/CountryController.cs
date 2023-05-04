@@ -102,5 +102,22 @@ namespace PokemonReview.Controllers
 
             return Ok("Country Successfuly created.");
         }
+
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCountry(int countryId)
+        {
+            if (!_countryRepository.CountryExists(countryId)) 
+                return NotFound();
+
+            if (!_countryRepository.DeleteCountry(countryId))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
