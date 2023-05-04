@@ -103,5 +103,22 @@ namespace PokemonReview.Controllers
 
             return Ok("Pokemon Successfuly created.");
         }
+
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeletePokemon(int pokemonID)
+        {
+            if (!_pokemonRepository.PokemonExists(pokemonID))
+                return NotFound();
+
+            if (!_pokemonRepository.DeletePokemon(pokemonID))
+            {
+                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

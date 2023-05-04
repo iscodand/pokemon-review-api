@@ -1,5 +1,4 @@
 ﻿using PokemonReview.Data.DTOs;
-using PokemonReview.Models;
 
 namespace PokemonReview.Interfaces
 {
@@ -11,6 +10,7 @@ namespace PokemonReview.Interfaces
         public bool PokemonExists(int pokeId);
 
         public bool CreatePokemon(CreatePokemonDTO pokemonDTO);
+        public bool DeletePokemon(int pokeId);
         public bool Save();
     }
 }

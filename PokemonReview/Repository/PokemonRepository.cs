@@ -72,6 +72,18 @@ namespace PokemonReview.Repository
             return Save();
         }
 
+        public bool DeletePokemon(int pokemonId)
+        {
+            Pokemon? pokemon = _context.Pokemons.FirstOrDefault(p => p.Id == pokemonId);
+            if (pokemon != null)
+            {
+                _context.Pokemons.Remove(pokemon);
+                return Save();
+            }
+
+            return false;
+        }
+
         public bool Save()
         {
             int saved = _context.SaveChanges();
