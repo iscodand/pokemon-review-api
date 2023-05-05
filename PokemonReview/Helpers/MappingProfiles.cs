@@ -16,6 +16,8 @@ namespace PokemonReview.Helpers
 
             CreateMap<Owner, GetOwnerDTO>();
             CreateMap<CreateOwnerDTO, Owner>();
+            CreateMap<UpdateOwnerDTO, Owner>();
+            CreateMap<Owner, UpdateOwnerDTO>();
 
             CreateMap<Pokemon, GetPokemonDTO>();
             CreateMap<CreatePokemonDTO, Pokemon>();

@@ -114,7 +114,7 @@ namespace PokemonReview.Controllers
 
             if (!_reviewRepository.CreateReview(reviewDTO))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
@@ -131,7 +131,7 @@ namespace PokemonReview.Controllers
 
             if (!_reviewRepository.DeleteReview(reviewID))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
