@@ -78,11 +78,29 @@ namespace PokemonReview.Controllers
 
             if (!_categoryRepository.CreateCategory(categoryDTO))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Category Successfuly created.");
+        }
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCategory(int categoryId, [FromBody] CreateCategoryDTO categoryDTO)
+        {
+            if (!_categoryRepository.CategoriesExists(categoryId))
+                return NotFound();
+            
+            if (!_categoryRepository.UpdateCategory(categoryId, categoryDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
+                return StatusCode(500, ModelState);
+            };
+
+            return Ok("Category Successfuly updated.");
         }
 
         [HttpDelete]
@@ -95,7 +113,7 @@ namespace PokemonReview.Controllers
 
             if (!_categoryRepository.DeleteCategory(categoryId))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 

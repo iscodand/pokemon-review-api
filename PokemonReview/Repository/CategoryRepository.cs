@@ -36,7 +36,7 @@ namespace PokemonReview.Repository
                 .Where(c => c.CategoryId == categoryId)
                 .Select(c => c.Pokemon).ToList());
         }
-        
+
         public bool CategoriesExists(int categoryId)
         {
             return _context.Categories.Any(c => c.Id == categoryId);
@@ -46,8 +46,14 @@ namespace PokemonReview.Repository
         {
             Category category = _mapper.Map<Category>(categoryDTO);
             category.CreatedAt = DateTime.Now;
-            
             _context.Categories.Add(category);
+            return Save();
+        }
+
+        public bool UpdateCategory(int categoryId, CreateCategoryDTO categoryDTO)
+        {
+            Category? category = _context.Categories.First(c => c.Id == categoryId);
+            _mapper.Map(categoryDTO, category);
             return Save();
         }
 

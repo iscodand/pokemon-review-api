@@ -2,6 +2,7 @@
 
 namespace PokemonReview.Data.DTOs
 {
+    // Create and Update => DRY
     public class CreateCategoryDTO
     {
         [Required]
