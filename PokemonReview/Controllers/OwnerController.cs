@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
+using System.Diagnostics;
 
 namespace PokemonReview.Controllers
 {
@@ -78,11 +80,48 @@ namespace PokemonReview.Controllers
 
             if (!_ownerRepository.CreateOwner(ownerDTO))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Owner Successfuly Created.");
+        }
+
+        [HttpPut("{ownerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult UpdateOwner(int ownerId, [FromBody] UpdateOwnerDTO ownerDTO)
+        {
+            if (!_ownerRepository.OwnerExists(ownerId))
+                return NotFound();
+
+            if (!_ownerRepository.UpdateOwner(ownerId, ownerDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Owner Successfuly updated.");
+        }
+
+
+        [HttpPatch("{ownerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult PartialUpdateOwner(int ownerId, [FromBody] JsonPatchDocument patchDocument)
+        {
+            if (!_ownerRepository.OwnerExists(ownerId))
+                return NotFound();
+
+            if (!_ownerRepository.PartialUpdateOwner(ownerId, patchDocument))
+            {
+                ModelState.AddModelError("", "Something gets wrong... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Owner Successfuly updated.");
         }
 
         [HttpDelete]
@@ -95,7 +134,7 @@ namespace PokemonReview.Controllers
 
             if (!_ownerRepository.DeleteOwner(ownerId))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 

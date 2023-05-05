@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
@@ -49,21 +50,30 @@ namespace PokemonReview.Repository
             Owner owner = _mapper.Map<Owner>(ownerDTO);
             owner.Country = _context.Countries.First(c => c.Id == ownerDTO.CountryID);
             owner.CreatedAt = DateTime.Now;
-
             _context.Owners.Add(owner);
+            return Save();
+        }
+
+        public bool UpdateOwner(int ownerId, UpdateOwnerDTO ownerDTO)
+        {
+            Owner owner = _context.Owners.First(o => o.Id == ownerId);
+            _mapper.Map(ownerDTO, owner);
+            return Save();
+        }
+
+        public bool PartialUpdateOwner(int ownerId, JsonPatchDocument patchDocument)
+        {
+            Owner owner = _context.Owners.First(o => o.Id == ownerId);
+            patchDocument.ApplyTo(owner);
+            _context.Owners.Update(owner);
             return Save();
         }
 
         public bool DeleteOwner(int ownerId)
         {
-            Owner? owner = _context.Owners.FirstOrDefault(o => o.Id == ownerId);
-
-            if (owner != null)
-            {
-                _context.Owners.Remove(owner);
-                return Save();
-            }
-            return false;
+            Owner owner = _context.Owners.First(o => o.Id == ownerId);
+            _context.Owners.Remove(owner);
+            return Save();
         }
 
         public bool Save()
