@@ -52,8 +52,14 @@ namespace PokemonReview.Repository
         {
             Country country = _mapper.Map<Country>(countryDTO);
             country.CreatedAt = DateTime.Now;
-
             _context.Countries.Add(country);
+            return Save();
+        }
+
+        public bool UpdateCountry(int countryId, CreateCountryDTO countryDTO)
+        {
+            Country? country = _context.Countries.FirstOrDefault(c => c.Id == countryId);
+            _mapper.Map(countryDTO, country);
             return Save();
         }
 

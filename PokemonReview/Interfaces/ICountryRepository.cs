@@ -11,6 +11,7 @@ namespace PokemonReview.Interfaces
         bool CountryExists(int countryId);
 
         bool CreateCountry(CreateCountryDTO countryDTO);
+        bool UpdateCountry(int countryId, CreateCountryDTO countryDTO);
         bool DeleteCountry(int countryId);
         bool Save();
     }

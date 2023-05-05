@@ -87,7 +87,7 @@ namespace PokemonReview.Controllers
 
             bool countryExists = _countryRepository.GetCountries()
                 .Any(c => c.Name?.Trim().ToUpper() == countryDTO.Name?.Trim().ToUpper());
-        
+
             if (countryExists)
             {
                 ModelState.AddModelError("Name", "Ops! Category already registered.");
@@ -96,11 +96,29 @@ namespace PokemonReview.Controllers
 
             if (!_countryRepository.CreateCountry(countryDTO))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Country Successfuly created.");
+        }
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCountry(int countryId, [FromBody] CreateCountryDTO countryDTO)
+        {
+            if (!_countryRepository.CountryExists(countryId))
+                return NotFound();
+
+            if (!_countryRepository.UpdateCountry(countryId, countryDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Country Successfuly updated.");
         }
 
         [HttpDelete]
@@ -108,12 +126,12 @@ namespace PokemonReview.Controllers
         [ProducesResponseType(404)]
         public IActionResult DeleteCountry(int countryId)
         {
-            if (!_countryRepository.CountryExists(countryId)) 
+            if (!_countryRepository.CountryExists(countryId))
                 return NotFound();
 
             if (!_countryRepository.DeleteCountry(countryId))
             {
-                ModelState.AddModelError("", "Something gets wrong while creating... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
