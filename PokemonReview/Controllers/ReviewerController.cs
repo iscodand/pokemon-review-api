@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 
@@ -74,6 +75,48 @@ namespace PokemonReview.Controllers
             }
 
             return Ok("Reviewer successfuly created.");
+        }
+
+        [HttpPut("{reviewerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateReviewer(int reviewerId, UpdateReviewerDTO reviewerDTO)
+        {
+            if (!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewerRepository.UpdateReviewer(reviewerId, reviewerDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Reviewer successfuly updated.");
+        }
+
+        [HttpPatch("{reviewerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult PartialUpdateReviewer(int reviewerId, JsonPatchDocument<UpdateReviewerDTO> reviewerDTO)
+        {
+            if (!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewerRepository.PartialUpdateReviewer(reviewerId, reviewerDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Reviewer successfuly updated.");
         }
 
         [HttpDelete]

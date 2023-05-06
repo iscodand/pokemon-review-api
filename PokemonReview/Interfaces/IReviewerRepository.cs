@@ -1,4 +1,5 @@
-﻿using PokemonReview.Data.DTOs;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using PokemonReview.Data.DTOs;
 
 namespace PokemonReview.Interfaces
 {
@@ -10,6 +11,8 @@ namespace PokemonReview.Interfaces
         bool ReviewerExists (int reviewerId);
 
         bool CreateReviewer(CreateReviewerDTO reviewerDTO);
+        bool UpdateReviewer(int reviewerId, UpdateReviewerDTO patchDocument);
+        bool PartialUpdateReviewer(int reviewerId, JsonPatchDocument<UpdateReviewerDTO> reviewerDTO);
         bool DeleteReviewer(int reviewerId);
         bool Save();
     }

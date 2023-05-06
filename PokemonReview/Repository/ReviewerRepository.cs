@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using PokemonReview.Data;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
@@ -44,6 +45,22 @@ namespace PokemonReview.Repository
         {
             Reviewer reviewer = _mapper.Map<Reviewer>(reviewerDTO);
             _context.Reviewers.Add(reviewer);
+            return Save();
+        }
+
+        public bool UpdateReviewer(int reviewerId, UpdateReviewerDTO reviewerDTO)
+        {
+            Reviewer reviewer = _context.Reviewers.First(r => r.Id == reviewerId);
+            _mapper.Map(reviewerDTO, reviewer);
+            return Save();
+        }
+
+        public bool PartialUpdateReviewer(int reviewerId, JsonPatchDocument<UpdateReviewerDTO> patchDocument)
+        {
+            Reviewer reviewer = _context.Reviewers.First(r => r.Id == reviewerId);
+            UpdateReviewerDTO reviewerDTO = _mapper.Map<UpdateReviewerDTO>(reviewer);
+            patchDocument.ApplyTo(reviewerDTO);
+            _mapper.Map(reviewerDTO, reviewer);
             return Save();
         }
 
