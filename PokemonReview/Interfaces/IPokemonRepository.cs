@@ -10,6 +10,7 @@ namespace PokemonReview.Interfaces
         public bool PokemonExists(int pokeId);
 
         public bool CreatePokemon(CreatePokemonDTO pokemonDTO);
+        public bool UpdatePokemon(int pokeId, UpdatePokemonDTO pokemonDTO);
         public bool DeletePokemon(int pokeId);
         public bool Save();
     }

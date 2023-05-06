@@ -21,6 +21,8 @@ namespace PokemonReview.Helpers
 
             CreateMap<Pokemon, GetPokemonDTO>();
             CreateMap<CreatePokemonDTO, Pokemon>();
+            CreateMap<UpdatePokemonDTO, Pokemon>();
+            CreateMap<Pokemon, UpdatePokemonDTO>();
 
             CreateMap<Review, GetReviewDTO>();
             CreateMap<CreateReviewDTO, Review>();

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
-using PokemonReview.Models;
+using System.Diagnostics;
 
 namespace PokemonReview.Controllers
 {
@@ -102,6 +104,24 @@ namespace PokemonReview.Controllers
             }
 
             return Ok("Pokemon Successfuly created.");
+        }
+
+        [HttpPut("{pokeId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult PartialUpdatePokemon(int pokeId, [FromBody] UpdatePokemonDTO pokemonDTO)
+        {
+            if (!_pokemonRepository.PokemonExists(pokeId))
+                return NotFound();
+
+            if (!_pokemonRepository.UpdatePokemon(pokeId, pokemonDTO))
+            {
+                ModelState.AddModelError("", "Something gets wrong... Try again later.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Pokemon Successfuly updated.");
         }
 
         [HttpDelete]

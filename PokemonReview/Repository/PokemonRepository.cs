@@ -71,6 +71,12 @@ namespace PokemonReview.Repository
 
             return Save();
         }
+        public bool UpdatePokemon(int pokeId, UpdatePokemonDTO pokemonDTO)
+        {
+            Pokemon pokemon = _context.Pokemons.First(p => p.Id == pokeId);
+            _mapper.Map(pokemonDTO, pokemon);
+            return Save();
+        }
 
         public bool DeletePokemon(int pokemonId)
         {
