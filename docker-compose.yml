@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: PokemonReview/Dockerfile
+    ports:
+      - "8090:80"
+    depends_on:
+      - mssql-server
+
+  mssql-server:
+    user: root
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - dev-db-data:/var/opt/mssql/data
+    environment:
+        - SA_PASSWORD=Testing123!
+        - ACCEPT_EULA=Y
+    ports:
+        - "1440:1433"
+
+volumes:
+    dev-db-data:

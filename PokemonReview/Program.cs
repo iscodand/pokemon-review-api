@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PokemonReview.Data;
 using PokemonReview.Interfaces;
 using PokemonReview.Repository;
-using PokemonReviewApp;
+using PokemonReview.Seed;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,14 +48,16 @@ static void SeedData(IHost app)
     service?.SeedDataContext();
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (IServiceScope serviceScope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    serviceScope.ServiceProvider.GetService<DataContext>().Database.Migrate();
 }
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Disable HTTPS for Docker
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
