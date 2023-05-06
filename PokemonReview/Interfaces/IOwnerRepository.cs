@@ -11,7 +11,7 @@ namespace PokemonReview.Interfaces
         bool OwnerExists(int ownerId);
 
         bool CreateOwner(CreateOwnerDTO ownerDTO);
-        bool UpdateOwner(int ownerId, UpdateOwnerDTO patchDocument);
+        bool UpdateOwner(int ownerId, UpdateOwnerDTO ownerDTO);
         bool PartialUpdateOwner(int ownerId, JsonPatchDocument<UpdateOwnerDTO> patchDocument);
         bool DeleteOwner(int ownerId);
         bool Save();
