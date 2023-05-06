@@ -80,7 +80,7 @@ namespace PokemonReview.Controllers
 
             if (!_ownerRepository.CreateOwner(ownerDTO))
             {
-                ModelState.AddModelError("", "Something gets wrong ... Try again later.");
+                ModelState.AddModelError("", "Something gets wrong... Try again later.");
                 return StatusCode(500, ModelState);
             }
 
@@ -110,10 +110,13 @@ namespace PokemonReview.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public IActionResult PartialUpdateOwner(int ownerId, [FromBody] JsonPatchDocument patchDocument)
+        public IActionResult PartialUpdateOwner(int ownerId, [FromBody] JsonPatchDocument<UpdateOwnerDTO> patchDocument)
         {
             if (!_ownerRepository.OwnerExists(ownerId))
                 return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             if (!_ownerRepository.PartialUpdateOwner(ownerId, patchDocument))
             {

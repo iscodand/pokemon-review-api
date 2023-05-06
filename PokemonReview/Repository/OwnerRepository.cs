@@ -61,11 +61,12 @@ namespace PokemonReview.Repository
             return Save();
         }
 
-        public bool PartialUpdateOwner(int ownerId, JsonPatchDocument patchDocument)
+        public bool PartialUpdateOwner(int ownerId, JsonPatchDocument<UpdateOwnerDTO> patchDocument)
         {
             Owner owner = _context.Owners.First(o => o.Id == ownerId);
-            patchDocument.ApplyTo(owner);
-            _context.Owners.Update(owner);
+            UpdateOwnerDTO ownerDTO = _mapper.Map<UpdateOwnerDTO>(owner);
+            patchDocument.ApplyTo(ownerDTO);
+            _mapper.Map(ownerDTO, owner);
             return Save();
         }
 

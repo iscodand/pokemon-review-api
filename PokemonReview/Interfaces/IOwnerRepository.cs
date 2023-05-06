@@ -12,7 +12,7 @@ namespace PokemonReview.Interfaces
 
         bool CreateOwner(CreateOwnerDTO ownerDTO);
         bool UpdateOwner(int ownerId, UpdateOwnerDTO patchDocument);
-        bool PartialUpdateOwner(int ownerId, JsonPatchDocument patchDocument);
+        bool PartialUpdateOwner(int ownerId, JsonPatchDocument<UpdateOwnerDTO> patchDocument);
         bool DeleteOwner(int ownerId);
         bool Save();
     }
