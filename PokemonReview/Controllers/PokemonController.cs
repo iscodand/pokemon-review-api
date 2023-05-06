@@ -110,10 +110,13 @@ namespace PokemonReview.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public IActionResult PartialUpdatePokemon(int pokeId, [FromBody] UpdatePokemonDTO pokemonDTO)
+        public IActionResult UpdatePokemon(int pokeId, [FromBody] UpdatePokemonDTO pokemonDTO)
         {
             if (!_pokemonRepository.PokemonExists(pokeId))
                 return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             if (!_pokemonRepository.UpdatePokemon(pokeId, pokemonDTO))
             {
