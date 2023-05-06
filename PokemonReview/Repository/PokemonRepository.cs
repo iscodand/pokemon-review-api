@@ -1,4 +1,6 @@
-﻿using PokemonReview.Data;
+﻿using AutoMapper;
+using PokemonReview.Data;
+using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 using PokemonReview.Models;
 
@@ -7,25 +9,24 @@ namespace PokemonReview.Repository
     public class PokemonRepository : IPokemonRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public PokemonRepository(DataContext context)
+        public PokemonRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public ICollection<Pokemon> GetPokemons()
+        public ICollection<GetPokemonDTO> GetPokemons()
         {
-            return _context.Pokemons.OrderBy(p => p.Id).ToList();
+            return _mapper.Map<List<GetPokemonDTO>>
+                (_context.Pokemons.OrderBy(p => p.Id).ToList());
         }
 
-        public Pokemon GetPokemon(int pokeId)
+        public GetPokemonDTO GetPokemon(int pokeId)
         {
-            return _context.Pokemons.Where(p => p.Id == pokeId).FirstOrDefault();
-        }
-
-        public Pokemon GetPokemon(string name)
-        {
-            return _context.Pokemons.Where(p => p.Name == name).FirstOrDefault();
+            return _mapper.Map<GetPokemonDTO>(
+                _context.Pokemons.FirstOrDefault(p => p.Id == pokeId));
         }
 
         public decimal GetPokemonRating(int pokeId)
@@ -41,9 +42,52 @@ namespace PokemonReview.Repository
             return Math.Round(rating, 1);
         }
 
-        public bool GetPokemonExists(int pokeId)
+        public bool PokemonExists(int pokeId)
         {
             return _context.Pokemons.Any(p => p.Id == pokeId);
+        }
+
+        public bool CreatePokemon(CreatePokemonDTO pokemonDTO)
+        {
+            Pokemon pokemon = _mapper.Map<Pokemon>(pokemonDTO);
+            Owner pokemonOwnerEntity = _context.Owners.First(o => o.Id == pokemonDTO.OwnerID);
+            Category pokemonCategoryEntity = _context.Categories.First(c => c.Id == pokemonDTO.CategoryID);
+
+            PokemonOwner pokemonOwner = new()
+            {
+                Pokemon = pokemon,
+                Owner = pokemonOwnerEntity,
+            };
+
+            PokemonCategory pokemonCategory = new()
+            {
+                Pokemon = pokemon,
+                Category = pokemonCategoryEntity,
+            };
+
+            _context.Pokemons.Add(pokemon);
+            _context.PokemonOwners.Add(pokemonOwner);
+            _context.PokemonCategories.Add(pokemonCategory);
+
+            return Save();
+        }
+
+        public bool DeletePokemon(int pokemonId)
+        {
+            Pokemon? pokemon = _context.Pokemons.FirstOrDefault(p => p.Id == pokemonId);
+            if (pokemon != null)
+            {
+                _context.Pokemons.Remove(pokemon);
+                return Save();
+            }
+
+            return false;
+        }
+
+        public bool Save()
+        {
+            int saved = _context.SaveChanges();
+            return saved > 0;
         }
     }
 }
