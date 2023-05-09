@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonReview.Api", "PokemonReview\PokemonReview.Api.csproj", "{E4FF7328-3CAC-4112-95BD-84F541888E99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuth.Api", "UserAuth.Api\UserAuth.Api.csproj", "{162D1BE6-F08F-4B6F-A2D8-D6CCA8C29D86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAuth.Api", "UserAuth.Api\UserAuth.Api.csproj", "{162D1BE6-F08F-4B6F-A2D8-D6CCA8C29D86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
