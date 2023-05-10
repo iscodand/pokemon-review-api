@@ -60,11 +60,11 @@ namespace UserAuth.Api.Controllers
         [HttpPost("Login/Refresh/")]
         [ProducesResponseType(200, Type = typeof(TokenResponse))]
         [ProducesResponseType(400, Type = typeof(TokenResponse))]
-        public async Task<ActionResult> RefreshToken([FromBody] Token tokenModel)
+        public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenDTO tokenDTO)
         {
             if (ModelState.IsValid)
             {
-                var result = await _userRepository.RefreshToken(tokenModel);
+                TokenResponse? result = await _userRepository.RefreshToken(tokenDTO);
 
                 if (result.IsSuccess)
                     return Ok(result);
