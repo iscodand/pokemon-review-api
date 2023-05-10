@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
@@ -9,6 +10,7 @@ namespace PokemonReview.Controllers
 {
     [Route("api/v1/[Controller]")]
     [ApiController]
+    [Authorize]
     public class PokemonController : Controller
     {
         private readonly IPokemonRepository _pokemonRepository;

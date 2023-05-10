@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PokemonReview.Data.DTOs;
 using PokemonReview.Interfaces;
 
@@ -6,6 +7,7 @@ namespace PokemonReview.Controllers
 {
     [Route("api/v1/[Controller]")]
     [ApiController]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
