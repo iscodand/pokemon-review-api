@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using UserAuth.Api.Data.DTOs.Request;
 using UserAuth.Api.Data.DTOs.Response;
 using UserAuth.Api.Interfaces;
-using UserAuth.Api.Models;
 
 namespace UserAuth.Api.Controllers
 {
