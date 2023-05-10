@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PokemonReview.Data;
 using PokemonReview.Interfaces;
 using PokemonReview.Repository;
 using PokemonReviewApp;
+using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,21 +29,21 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewerRepository, ReviewerRepository>();
 
 // Adding Bearer authentication
-//builder.Services.AddAuthentication(auth =>
-//{
-//    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-//    {
-//        ValidateIssuer = false,
-//        ValidateAudience = false,
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0asdjas09djas09djasdjasadajsd09asjd09sajcnzxn")),
-//        RequireExpirationTime = true,
-//        ValidateIssuerSigningKey = true
-//    };
-//});
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0asdjas09djas09djasdjasadajsd09asjd09sajcnzxn")),
+        RequireExpirationTime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -53,26 +57,26 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 var app = builder.Build();
 
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
-
-static void SeedData(IHost app)
+// Applying Migrations
+void MigrationInitialisation(IApplicationBuilder app)
 {
-    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-    using IServiceScope? scope = scopedFactory?.CreateScope();
-    Seed? service = scope?.ServiceProvider.GetService<Seed>();
-    service?.SeedDataContext();
+    using var serviceScope = app.ApplicationServices.CreateScope();
+    serviceScope.ServiceProvider.GetService<DataContext>().Database.Migrate();
 }
+
+try
+{
+    MigrationInitialisation(app);
+}
+catch (Exception ex)
+{
+    Debug.WriteLine("O banco ja subiu porra.");
+}
+
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 

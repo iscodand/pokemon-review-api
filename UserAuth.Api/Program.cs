@@ -56,14 +56,25 @@ builder.Services.AddAuthentication(auth =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Applying Migrations
+void MigrationInitialisation(IApplicationBuilder app)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    using var serviceScope = app.ApplicationServices.CreateScope();
+    serviceScope.ServiceProvider.GetService<DataContext>().Database.Migrate();
 }
 
-app.UseHttpsRedirection();
+try
+{
+    MigrationInitialisation(app);
+}
+catch (Exception ex)
+{
+    Debug.WriteLine("O banco ja subiu porra.");
+}
+
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 
