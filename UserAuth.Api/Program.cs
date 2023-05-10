@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using UserAuth.Api.Data;
 using UserAuth.Api.Interfaces;
+using UserAuth.Api.Models;
 using UserAuth.Api.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,13 +25,14 @@ builder.Services.AddSwaggerGen();
 
 // Dependency Injection
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;
 }).AddEntityFrameworkStores<DataContext>()
@@ -40,13 +42,14 @@ builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
         ValidateAudience = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0asdjas09djas09djasdjasadajsd09asjd09sajcnzxn")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"])),
         ValidateIssuerSigningKey = true
     };
 });
