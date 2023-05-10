@@ -108,10 +108,10 @@ namespace UserAuth.Api.Repository
             };
         }
 
-        public async Task<TokenResponse> RefreshToken(Token tokenModel)
+        public async Task<TokenResponse> RefreshToken(RefreshTokenDTO tokenDTO)
         {
-            string? accessToken = tokenModel.AccessToken;
-            string? refreshToken = tokenModel.RefreshToken;
+            string? accessToken = tokenDTO.AccessToken;
+            string? refreshToken = tokenDTO.RefreshToken;
 
             ClaimsPrincipal? principal = _tokenRepository.GetPrincipalFromExpiredToken(accessToken);
             if (principal == null)
