@@ -19,8 +19,8 @@
 > All goals and Features to be added.
 
 - [X] ~~GET / POST / PUT / PATCH / DELETE~~
+- [X] ~~JWT Authorization/Authentication with Identity~~
 - [ ] Containerization with Docker
-- [ ] JWT Authorization/Authentication with Identity
 - [ ] Unit Tests Coverage
 - [ ] CI with Github Actions
 
