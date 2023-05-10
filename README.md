@@ -14,13 +14,29 @@
 
 > This project have the main objective of *improve my skills with ASP.NET Core and his tools and integrations*.
 
+## Tech Stack
+
+- `.NET 7`
+- `ASP.NET Core Web API`
+- `Docker`
+- `MSSQL SQL Server`
+- `Identity - JWT Authentication and Authorization`
+- `Entity Framework Core`
+- `Auto Mapper`
+
+<p align="right">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=cs,dotnet,docker" />
+  </a>
+</p>
+
 ## Goals and Features
 
 > All goals and Features to be added.
 
 - [X] ~~GET / POST / PUT / PATCH / DELETE~~
+- [X] ~~JWT Authorization/Authentication with Identity~~
 - [ ] Containerization with Docker
-- [ ] JWT Authorization/Authentication with Identity
 - [ ] Unit Tests Coverage
 - [ ] CI with Github Actions
 
