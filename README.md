@@ -36,7 +36,7 @@
 
 - [X] ~~GET / POST / PUT / PATCH / DELETE~~
 - [X] ~~JWT Authorization/Authentication with Identity~~
-- [ ] Containerization with Docker
+- [X] ~~Containerization with Docker~~
 - [ ] Unit Tests Coverage
 - [ ] CI with Github Actions
 
